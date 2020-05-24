@@ -1,3 +1,5 @@
+const bcrypt = require('bcryptjs')
+
 const { sequelize } = require('../../core/db')
 
 const { Sequelize, Model } = require('sequelize')
@@ -23,7 +25,18 @@ User.init({
         // 是否唯一
         unique: true
     },
-    password: Sequelize.STRING,
+    password: {
+        type: Sequelize.STRING,
+        // model属性操作，观察者模式
+        set(val){
+            // 生成盐值
+            const salt = bcrypt.genSaltSync(10)
+            // 密码加密
+            const psw = bcrypt.hashSync(val, salt)
+            // 第一个参数为字段名，第二个参数为值
+            this.setDataValue('password',psw)
+        }
+    },
     openid: {
         type: Sequelize.STRING(64),
         // 是否唯一

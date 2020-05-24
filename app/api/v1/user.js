@@ -1,3 +1,4 @@
+const bcrypt = require('bcryptjs') // 先导入通过npm安装的包，再导入自己写的
 const Router = require('koa-router')
 
 const { RegisterValidator } = require('../../validators/validator')
@@ -12,6 +13,7 @@ router.post('/register', async (ctx) => {
     // 校验器要放在正常的业务代码之前
     // 添加await的原因是异步验证出现错误时不能阻止后续代码的执行
     const v = await new RegisterValidator().validate(ctx)
+   
     const user = {
         email: v.get('body.email'),
         password: v.get('body.password2'),
