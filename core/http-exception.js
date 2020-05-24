@@ -18,4 +18,18 @@ class ParameterException extends HttpException{
     }
 }
 
-module.exports = { HttpException, ParameterException }
+// 成功提示信息
+class Success extends HttpException{
+    constructor(msg, errorCode){
+        super()
+        this.code = 201,
+        this.msg = msg || 'ok'
+        this.errorCode = errorCode || 0
+    }
+}
+
+module.exports = { 
+    HttpException, 
+    ParameterException,
+    Success
+}
