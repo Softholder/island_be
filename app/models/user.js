@@ -6,7 +6,23 @@ const { Sequelize, Model } = require('sequelize')
 
 // 定义用户表的类User继承自Model
 class User extends Model{
-
+    // async要紧跟着函数名
+    static async verifyEmailPassword(email, plainPassword){
+        const user = await User.findOne({
+            where:{
+                email
+            }
+        })
+        if(!user){
+            throw new global.errs.AuthFailed('账号不存在');
+        }
+        // 比较明文密码和密文密码
+        const correct = bcrypt.compareSync(plainPassword, user.password)
+        if(!correct){
+            throw new global.errs.AuthFailed('密码不正确')
+        }
+        return user
+    }
 }
 
 // 设置用户表的字段

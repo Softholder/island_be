@@ -30,7 +30,7 @@ const sequelize = new Sequelize(dbName, user, password, {
 // 调用sync() 根据 model自动在数据库中创建表
 sequelize.sync({
     // 是否强制更新表结构
-    force: true
+    force: false
 })
 
 module.exports = {
