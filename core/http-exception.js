@@ -29,22 +29,32 @@ class Success extends HttpException{
 }
 
 // 未找到提示信息
-class NotFound extends HttpException{
-    constructor(msg, error_code){
-        super()
-        this.msg = msg || '资源未找到'
-        this.error_code = error_code || 10000
-        this.code = 404
-    }
+class NotFound extends HttpException {
+  constructor(msg, errorCode) {
+    super();
+    this.msg = msg || '资源未找到';
+    this.errorCode = errorCode || 10000;
+    this.code = 404;
+  }
 }
 
 // 用户认证失败提示信息
 class AuthFailed extends HttpException {
-  constructor(msg, error_code) {
+  constructor(msg, errorCode) {
     super();
     this.msg = msg || '授权失败';
-    this.error_code = error_code || 10004;
+    this.errorCode = errorCode || 10004;
     this.code = 401;
+  }
+}
+
+// 禁止访问提示信息
+class Forbidden extends HttpException {
+  constructor(msg, errorCode) {
+    super();
+    this.msg = msg || '禁止访问';
+    this.errorCode = errorCode || 10006;
+    this.code = 403;
   }
 }
 
@@ -53,5 +63,6 @@ module.exports = {
     ParameterException,
     Success,
     NotFound,
-    AuthFailed
+    AuthFailed,
+    Forbidden
 }
