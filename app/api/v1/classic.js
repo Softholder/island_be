@@ -6,6 +6,7 @@ const { PositiveIntegerValidator } = require('../../validators/validator')
 
 const { Auth } = require('../../../middlewares/auth')
 
+// 校验token合法性中间件要放在业务中间件之前
 router.get('/latest', new Auth().m, async (ctx, next) => {
     // const path = ctx.params
     // const query = ctx.request.query

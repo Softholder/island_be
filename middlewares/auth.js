@@ -2,8 +2,12 @@ const basicAuth = require('basic-auth')
 const jwt = require('jsonwebtoken')  
 
 class Auth {
-    constructor(){
-
+    constructor(level){
+        // level为权限等级，当用户的权限小于接口权限等级时不可访问接口
+        this.level = level || 1
+        Auth.USER = 8
+        Auth.ADMIN = 16
+        Auth.SUPER_ADMIN = 32
     }
 
     // m属性的get方法
@@ -29,6 +33,13 @@ class Auth {
                 // token不合法
                 throw new global.errs.Forbidden(errMsg);
             }
+
+            // 用户权限不能访问接口时的异常提示
+            if(decode.scope < this.level){
+                errMsg = '权限不足'
+                throw new global.errs.Forbidden(errMsg);
+            }
+
             // 将token中自定义的uid, scope取出挂载在ctx对象上
             ctx.auth = {
                 uid: decode.uid,

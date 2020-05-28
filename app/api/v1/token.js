@@ -3,6 +3,7 @@ const { TokenValidator } = require('../../validators/validator')
 const { LoginType } = require('../../lib/enum')
 const { User } = require('../../models/user')
 const { generateToken } = require('../../../core/util')
+const { Auth } = require('../../../middlewares/auth')
 
 const router = new Router({
     prefix: '/v1/token'
@@ -20,6 +21,8 @@ router.post('/', async (ctx) => {
         case LoginType.USER_MINI_PROGRAM:
 
             break;
+        case LoginType.ADMIN_EMAIL:
+            break
         default:
             throw new global.errs.ParameterException('没有相应的处理函数')
     }
@@ -31,8 +34,8 @@ router.post('/', async (ctx) => {
 async function emailLogin(account, secret){
     // 验证账号密码
     const user = await User.verifyEmailPassword(account, secret)
-    // 生成令牌并返回
-    return generateToken(user.id, 2)
+    // 生成令牌并返回，普通用户的权限是8
+    return generateToken(user.id, Auth.USER)
 }
 
 module.exports = router
