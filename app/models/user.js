@@ -23,6 +23,23 @@ class User extends Model{
         }
         return user
     }
+
+    // 根据openid查询用户
+    static async getUserByOpenid(openid){
+        const user = await User.findOne({
+            where: {
+                openid
+            }
+        })
+        return user
+    }
+
+    // 根据openid注册用户
+    static async registerByOpenid(openid) {
+        return await User.create({
+            openid
+        })
+    }
 }
 
 // 设置用户表的字段
