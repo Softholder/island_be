@@ -50,6 +50,19 @@ class Auth {
             await next()
         }
     }
+
+    // 验证token
+    static verifyToken(token){
+        try {
+            // 令牌验证成功则返回true
+            jwt.verify(token, global.config.security.secretKey)
+            return true
+        } catch (error) {
+            // 抛出异常则认为令牌不合法，返回false
+            return false
+        }
+        
+    }
 }
 
 module.exports = {

@@ -25,8 +25,9 @@ class WXManager{
             throw new global.errs.AuthFailed('openid获取失败')
         }
         const errcode = result.data.errcode
-        if(errcode !== 0) {
-            throw new global.errs.AuthFailed('openid获取失败' + errcode)
+        const errmsg = result.data.errmsg
+        if(errcode) {
+            throw new global.errs.AuthFailed('openid获取失败' + errmsg)
         }
 
         // 查询用户，若不存在则创建
