@@ -6,7 +6,7 @@ const router = new Router({
 const { PositiveIntegerValidator } = require('../../validators/validator')
 
 const { Auth } = require('../../../middlewares/auth')
-
+const { Art } = require('../../models/art')
 // 校验token合法性中间件要放在业务中间件之前
 router.get('/latest', new Auth().m, async (ctx, next) => {
     // const path = ctx.params
@@ -33,7 +33,12 @@ router.get('/latest', new Auth().m, async (ctx, next) => {
             ['index', 'DESC']
         ]
     })
-    ctx.body = flow
+    const art = await Art.getData(flow.artId, flow.type)
+    // 返回信息以art为主体
+    // 序列化json时只序列化dataValues中的数据
+    // art.dataValues.index = flow.index
+    art.setDataValue('index', flow.index)
+    ctx.body = art
 
 })
 
