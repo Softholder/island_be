@@ -17,9 +17,9 @@ const sequelize = new Sequelize(dbName, user, password, {
         // 是否自动加入deleteAt字段
         paranoid: true,
         // 设置字段名称
-        createdAt: 'create_time',
-        updatedAt: 'update_time',
-        deletedAt: 'delete_time',
+        createdAt: 'created_at',
+        updatedAt: 'updated_at',
+        deletedAt: 'deleted_at',
         // 设置下划线格式命名字段名
         underscored: true,
         // 设置表名与模型名相同

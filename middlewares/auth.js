@@ -18,7 +18,7 @@ class Auth {
             let errMsg = 'token不合法'
 
             if(!userToken || !userToken.name){
-                throw new global.errs.Forbbiden(errMsg)
+                throw new global.errs.Forbidden(errMsg)
             }
             try {
                 // 校验token的合法性

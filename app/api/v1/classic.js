@@ -1,4 +1,5 @@
 const Router = require('koa-router')
+const { Flow } = require('../../models/flow')
 const router = new Router({
     prefix: '/v1/classic'
 })
@@ -25,8 +26,14 @@ router.get('/latest', new Auth().m, async (ctx, next) => {
     // //     throw error
     // // }
 
-    // ctx.body = "success"
-    ctx.body = ctx.auth.uid
+    // findOne取降序的第一个
+    const flow = await Flow.findOne({
+        order: [
+            // 根据index降序排序
+            ['index', 'DESC']
+        ]
+    })
+    ctx.body = flow
 
 })
 

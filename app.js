@@ -7,6 +7,8 @@ const catchError = require('./middlewares/exception')
 // const classic = require('./api/v1/classic')
 
 // require('./app/models/user')
+// require('./app/models/classic')
+// require('./app/models/flow')
 
 const app = new Koa()
 app.use(catchError)
