@@ -62,6 +62,7 @@ class RegisterValidator extends LinValidator{
     }
 }
 
+// token验证器
 class TokenValidator extends LinValidator{
     constructor(){
         super()
@@ -93,6 +94,7 @@ class TokenValidator extends LinValidator{
     }
 }
 
+// 非空验证器
 class NotEmptyValidator extends LinValidator{
     constructor(){
         super()
@@ -102,9 +104,27 @@ class NotEmptyValidator extends LinValidator{
     }
 }
 
+function checkType(vals) {
+    if (!vals.body.type) {
+        throw new Error('type是必须参数')
+    }
+    if (!LoginType.isThisType(vals.body.type)) {
+        throw new Error('type参数不合法')
+    }
+}
+
+// 点赞验证器，验证art_id与type
+class LikeValidator extends PositiveIntegerValidator {
+    constructor(){
+        super()
+        this.validateType = checkType
+    }
+}
+
 module.exports = {
     PositiveIntegerValidator,
     RegisterValidator,
     TokenValidator,
-    NotEmptyValidator
+    NotEmptyValidator,
+    LikeValidator
 }
