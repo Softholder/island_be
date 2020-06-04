@@ -1,6 +1,6 @@
 function isThisType(val){
     for(let key in this){
-        if(this[key] == val){
+        if(this[key] === val){
             return true
         }
     }

@@ -7,6 +7,7 @@ class PositiveIntegerValidator extends LinValidator{
     constructor(){
         super()
         // 类的属性名需要保持与校验对象的属性名一致
+        // 带isInt校验规则的validator才可以自动转型(string 转 int)
         this.id = [
             // 第一个参数为检验规则，第二个为校验不通过的提示信息，第三个为可选参数，最小值/最大值等
             // 可定义多个校验规则，之间是且关系
@@ -105,10 +106,14 @@ class NotEmptyValidator extends LinValidator{
 }
 
 function checkType(vals) {
-    if (!vals.body.type) {
+    let type = vals.body.type || vals.path.type
+    if (!type) {
         throw new Error('type是必须参数')
     }
-    if (!LoginType.isThisType(vals.body.type)) {
+    type = parseInt(type)
+    // LinValidator中parsed保存的是转型过后的相关变量
+    // this.parsed.path.type = type
+    if (!LoginType.isThisType(type)) {
         throw new Error('type参数不合法')
     }
 }
@@ -121,10 +126,15 @@ class LikeValidator extends PositiveIntegerValidator {
     }
 }
 
+class ClassicValidator extends LikeValidator {
+
+}
+
 module.exports = {
     PositiveIntegerValidator,
     RegisterValidator,
     TokenValidator,
     NotEmptyValidator,
-    LikeValidator
+    LikeValidator,
+    ClassicValidator
 }

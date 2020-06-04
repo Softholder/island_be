@@ -3,10 +3,11 @@ const { Flow } = require('../../models/flow')
 const router = new Router({
     prefix: '/v1/classic'
 })
-const { PositiveIntegerValidator } = require('../../validators/validator')
+const { PositiveIntegerValidator, ClassicValidator } = require('../../validators/validator')
 
 const { Auth } = require('../../../middlewares/auth')
 const { Art } = require('../../models/art')
+const { Favor } = require('../../models/favor');
 // 校验token合法性中间件要放在业务中间件之前
 router.get('/latest', new Auth().m, async (ctx, next) => {
     // const path = ctx.params
@@ -14,6 +15,7 @@ router.get('/latest', new Auth().m, async (ctx, next) => {
     // const header = ctx.request.header
     // const body = ctx.request.body
 
+    // 通过params或query传递整数获取到的是字符串，body传递的才是整数
     // // 所有的参数均保存在ctx对象中，在其中遍历查询，因此使用其作为参数且变量名不能重复
     // // 返回值仍然是PositiveIntegerValidator类型
     // const v = await new PositiveIntegerValidator().validate(ctx)
@@ -40,6 +42,23 @@ router.get('/latest', new Auth().m, async (ctx, next) => {
     art.setDataValue('index', flow.index)
     ctx.body = art
 
+})
+
+router.get('/:type/:id/favor', new Auth().m, async ctx => {
+    const v = await new ClassicValidator().validate(ctx)
+    const id = v.get('path.id')
+    const type = parseInt(v.get('path.type'))
+    const art = await Art.getData(id, type)
+    if(!art){
+        throw new global.errs.NotFound()
+    }
+    const like = await Favor.userLikeIt(
+        id, type, ctx.auth.uid
+    )
+    ctx.body = {
+        fav_nums: art.fav_nums,
+        like_status: like
+    }
 })
 
 module.exports = router
